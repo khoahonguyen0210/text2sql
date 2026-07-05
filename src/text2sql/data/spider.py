@@ -48,6 +48,13 @@ def load_examples(split: str, spider_dir: Path = SPIDER_DIR) -> list[Example]:
     return examples
 
 
+def load_questions(path: Path, split: str = "dev") -> list[Example]:
+    """Questions without gold SQL, as written by scripts/build_data.py."""
+    rows = [json.loads(line) for line in Path(path).read_text(encoding="utf-8").splitlines()
+            if line.strip()]
+    return [Example(r["id"], split, r["db_id"], r["question"], "") for r in rows]
+
+
 def load_schemas(spider_dir: Path = SPIDER_DIR) -> dict[str, Schema]:
     entries = json.loads((spider_dir / "tables.json").read_text(encoding="utf-8"))
     return {e["db_id"]: schema_from_spider(e) for e in entries}

@@ -73,7 +73,8 @@ def schema_from_spider(entry: dict) -> Schema:
         r_idx, ref_col = columns[ref_idx]
         fks.append(ForeignKey(table_names[t_idx], col, table_names[r_idx], ref_col))
 
-    tables = tuple(Table(name, tuple(cols)) for name, cols in zip(table_names, per_table, strict=True))
+    pairs = zip(table_names, per_table, strict=True)
+    tables = tuple(Table(name, tuple(cols)) for name, cols in pairs)
     return Schema(entry["db_id"], tables, tuple(fks))
 
 
