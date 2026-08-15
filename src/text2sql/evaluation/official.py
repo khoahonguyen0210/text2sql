@@ -1,5 +1,6 @@
 """Wrapper around the pinned official Spider evaluator (taoyds/test-suite-sql-eval)."""
 
+import asyncio
 import os
 import re
 import stat
@@ -26,6 +27,30 @@ _EMPTY_SQL = {
     "union": None,
     "where": [],
 }
+
+
+class OneLoop:
+    """Stands in for asyncio inside exec_eval.py, with one event loop for all queries.
+
+    exec_eval.py calls asyncio.run() per query and database. On Windows each new loop opens
+    two local sockets, so a test-suite run (about 70,000 calls) runs out of ports and hangs.
+    """
+
+    def __init__(self):
+        self._loop = asyncio.new_event_loop()
+
+    def __getattr__(self, name: str):
+        return getattr(asyncio, name)
+
+    def run(self, coro):
+        return self._loop.run_until_complete(coro)
+
+
+def patch_exec_eval() -> None:
+    import exec_eval  # type: ignore[import-not-found]
+
+    if not isinstance(exec_eval.asyncio, OneLoop):
+        exec_eval.asyncio = OneLoop()
 
 
 def flat(sql: str) -> str:
@@ -55,7 +80,8 @@ def run_official(
     """Run the unmodified evaluation.py and return what it prints."""
     cmd = [
         sys.executable,
-        "evaluation.py",
+        "-m",
+        "text2sql.evaluation.official_cli",
         "--gold", str(Path(gold_file).resolve()),
         "--pred", str(Path(pred_file).resolve()),
         "--db", str(Path(db_dir).resolve()),
@@ -113,6 +139,7 @@ class OfficialScorer:
             nltk.data.path.insert(0, str(NLTK_DIR))
         import evaluation as ev  # type: ignore[import-not-found]
 
+        patch_exec_eval()
         self.ev = ev
         self.db_dir = Path(db_dir)
         self.kmaps = ev.build_foreign_key_map_from_json(str(table_file))

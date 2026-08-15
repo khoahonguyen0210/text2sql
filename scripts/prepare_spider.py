@@ -21,18 +21,14 @@ TESTSUITE_DIR = DATA_DIR / "testsuite" / "database"
 
 
 def safe_members(zf: zipfile.ZipFile) -> list[zipfile.ZipInfo]:
-    """Reject absolute paths and '..' parts, so nothing is written outside the target."""
-    members = []
-    for info in zf.infolist():
-        parts = PurePosixPath(info.filename).parts
-        if info.filename.startswith(("/", "\\")) or ".." in parts or ":" in info.filename:
-            sys.exit(f"unsafe path in zip: {info.filename}")
-        if "__MACOSX" not in parts:
-            members.append(info)
-    return members
+    return [i for i in zf.infolist()
+            if "__MACOSX" not in PurePosixPath(i.filename).parts and not i.is_dir()]
 
 
-def extract(zf: zipfile.ZipFile, info: zipfile.ZipInfo, target: Path) -> None:
+def extract(zf: zipfile.ZipFile, info: zipfile.ZipInfo, target: Path, base: Path) -> None:
+    """Write one member, but only if it lands inside base."""
+    if ":" in target.name or not target.resolve().is_relative_to(base.resolve()):
+        sys.exit(f"unsafe path in zip: {info.filename}")
     target.parent.mkdir(parents=True, exist_ok=True)
     with zf.open(info) as src, target.open("wb") as dst:
         shutil.copyfileobj(src, dst)
@@ -48,12 +44,12 @@ def unpack_spider(zip_path: Path) -> dict:
         if SPIDER_DIR.exists():
             shutil.rmtree(SPIDER_DIR)
         for info in members:
-            if info.is_dir() or not info.filename.startswith(prefix):
+            if not info.filename.startswith(prefix):
                 continue
             rel = info.filename[len(prefix):]
             # The hidden test files are never unpacked.
-            if rel in SPIDER_FILES or rel.startswith("database/"):
-                extract(zf, info, SPIDER_DIR / rel)
+            if rel in SPIDER_FILES or (rel.startswith("database/") and rel.endswith(".sqlite")):
+                extract(zf, info, SPIDER_DIR / rel, SPIDER_DIR)
     files = {name: sha256_file(SPIDER_DIR / name) for name in SPIDER_FILES
              if (SPIDER_DIR / name).exists()}
     counts = {name: len(json.loads((SPIDER_DIR / name).read_text(encoding="utf-8")))
@@ -70,11 +66,11 @@ def unpack_testsuite(zip_path: Path, keep: set[str]) -> dict:
     with zipfile.ZipFile(zip_path) as zf:
         for info in safe_members(zf):
             parts = PurePosixPath(info.filename).parts
-            if info.is_dir() or "database" not in parts:
+            if "database" not in parts:
                 continue
             rel = parts[parts.index("database") + 1:]
             if len(rel) == 2 and rel[0] in keep and rel[1].endswith(".sqlite"):
-                extract(zf, info, TESTSUITE_DIR.joinpath(*rel))
+                extract(zf, info, TESTSUITE_DIR.joinpath(*rel), TESTSUITE_DIR)
                 kept += 1
     folders = sorted(p.name for p in TESTSUITE_DIR.iterdir())
     return {"sqlite_files": kept, "database_folders": len(folders),
