@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Text to SQL</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Text to SQL</h1>
+      <p>Ask a question about a database. A small fine-tuned model writes the SQL. You can read
+        the SQL first, then run it.</p>
+    </header>
+
+    <section class="card">
+      <label for="db">Database</label>
+      <select id="db"></select>
+      <p class="hint" id="tables"></p>
+
+      <label for="question">Question</label>
+      <textarea id="question" rows="3" maxlength="500"
+        placeholder="How many singers are there?"></textarea>
+      <button id="write" type="button">Write SQL</button>
+    </section>
+
+    <section class="card" id="sql-card" hidden>
+      <label for="sql">SQL</label>
+      <textarea id="sql" rows="4" maxlength="4000" spellcheck="false"></textarea>
+      <p class="hint" id="meta"></p>
+      <button id="run" type="button">Run query</button>
+    </section>
+
+    <section class="card" id="result-card" hidden>
+      <h2>Result</h2>
+      <p class="hint" id="result-meta"></p>
+      <div class="table-wrap"><table id="result"></table></div>
+    </section>
+
+    <p class="error" id="error" role="alert" hidden></p>
+
+    <footer>
+      <p>Queries run read-only on public Spider benchmark databases. Only one SELECT query runs
+        at a time, with a time limit and a 100-row limit. Nothing you type is stored.</p>
+    </footer>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>

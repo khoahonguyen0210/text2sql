@@ -1,0 +1,31 @@
+# API settings. The API only listens on 127.0.0.1.
+name = "serve"
+batch_size = 1
+adapter = "artifacts/runs/qlora-r16/adapter"
+db_root = "data/spider/database"
+databases = "dev"  # only the 20 Spider dev databases can be used
+
+[model]
+id = "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+revision = "2e1fd397ee46e1388853d2af2c993145b0f1098a"
+dtype = "float32"
+
+[prompt]
+version = "v1"
+schema_style = "ddl"
+include_foreign_keys = true
+
+[decoding]
+max_new_tokens = 256
+do_sample = false
+num_beams = 1
+repetition_penalty = 1.0
+
+[limits]
+max_body_bytes = 16384
+max_question_chars = 500
+generate_per_minute = 20
+run_per_minute = 60
+query_timeout_s = 5.0
+max_rows = 100
+max_cell_chars = 200
