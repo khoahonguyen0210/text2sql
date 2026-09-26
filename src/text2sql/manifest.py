@@ -41,7 +41,8 @@ def git_state() -> dict:
         )
         return out.stdout.strip()
 
-    return {"commit": git("rev-parse", "HEAD") or None, "dirty": bool(git("status", "--porcelain"))}
+    dirty = bool(git("status", "--porcelain", "--untracked-files=no"))
+    return {"commit": git("rev-parse", "HEAD") or None, "dirty": dirty}
 
 
 def package_versions() -> dict[str, str | None]:

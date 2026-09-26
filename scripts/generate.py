@@ -68,7 +68,9 @@ def main() -> None:
             "tables_json_sha256": sha256_file(SPIDER_DIR / "tables.json"),
         },
         "model": {"id": spec.model_id, "revision": spec.revision, "dtype": spec.dtype,
-                  "adapter": relative(args.adapter) if args.adapter else None},
+                  "adapter": args.adapter.parent.name if args.adapter else None,
+                  "adapter_sha256": sha256_file(args.adapter / "adapter_model.safetensors")
+                  if args.adapter else None},
         "prompt": asdict(cfg.prompt) | {"hash": cfg.prompt.hash()},
         "decoding": asdict(decoding),
         "batch_size": batch_size,
