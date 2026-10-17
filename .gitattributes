@@ -1,2 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+# Keep saved predictions as LF, so their SHA-256 matches the run manifests
+*.jsonl text eol=lf

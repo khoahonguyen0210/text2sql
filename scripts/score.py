@@ -19,16 +19,20 @@ def main() -> None:
     parser.add_argument("--db-set", choices=list(DB_DIRS), default="spider")
     parser.add_argument("--skip-official-cli", action="store_true",
                         help="per-example scoring only (faster, for quick checks)")
+    parser.add_argument("--out", type=Path, help="output folder (default: RUN_DIR/score-DB_SET)")
     args = parser.parse_args()
 
     pred_file = args.run_dir / "predictions.jsonl"
-    manifest = read_json(args.run_dir / "manifest.json")
+    manifest_file = args.run_dir / "manifest.json"
+    if not manifest_file.exists():  # runs saved in results/ by collect_results.py
+        manifest_file = args.run_dir / "generation_manifest.json"
+    manifest = read_json(manifest_file)
     preds = read_predictions(pred_file)
     examples = load_examples(manifest["split"])
     if manifest.get("subset", "full") != "full":
         examples = examples[: manifest["example_count"]]
 
-    out_dir = args.run_dir / f"score-{args.db_set}"
+    out_dir = args.out or args.run_dir / f"score-{args.db_set}"
     result = score_predictions(
         examples, preds, DB_DIRS[args.db_set], SPIDER_DIR / "tables.json", out_dir,
         db_set=args.db_set, run_official_cli=not args.skip_official_cli,

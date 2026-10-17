@@ -1,0 +1,116 @@
+{
+  "benchmark": "Spider 1.0",
+  "run_id": "qlora-r8-dev",
+  "subset": "full",
+  "model": {
+    "id": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+    "revision": "2e1fd397ee46e1388853d2af2c993145b0f1098a",
+    "dtype": "float16",
+    "adapter": "qlora-r8",
+    "adapter_sha256": "07bcdd599dca29ca2194559e3057bac0ecc146a720173848e4b647700fb427c8"
+  },
+  "prompt": {
+    "version": "v1",
+    "schema_style": "ddl",
+    "include_foreign_keys": true,
+    "hash": "9509d91ab66deabd"
+  },
+  "decoding": {
+    "max_new_tokens": 256,
+    "do_sample": false,
+    "num_beams": 1,
+    "repetition_penalty": 1.0
+  },
+  "predictions_file": "artifacts/runs/qlora-r8-dev/predictions.jsonl",
+  "predictions_sha256": "8ac9a353bffc8c024e54a12eb47768feb8782e8ae9a82e84258071f4ecfb7e5f",
+  "scored_at": "2026-10-16T17:06:33Z",
+  "split": "dev",
+  "example_count": 1034,
+  "db_set": "spider",
+  "headline_metric": "EX",
+  "scores": {
+    "EX": 0.7456479690522244,
+    "EM": 0.6798839458413927
+  },
+  "correct": {
+    "EX": 771,
+    "EM": 703
+  },
+  "by_hardness": {
+    "easy": {
+      "count": 248,
+      "exec": 0.9032258064516129,
+      "exact": 0.8830645161290323
+    },
+    "medium": {
+      "count": 446,
+      "exec": 0.7847533632286996,
+      "exact": 0.7152466367713004
+    },
+    "hard": {
+      "count": 174,
+      "exec": 0.632183908045977,
+      "exact": 0.5172413793103449
+    },
+    "extra": {
+      "count": 166,
+      "exec": 0.5240963855421686,
+      "exact": 0.45180722891566266
+    },
+    "all": {
+      "count": 1034,
+      "exec": 0.7456479690522244,
+      "exact": 0.6798839458413927
+    }
+  },
+  "official_cli": {
+    "easy": {
+      "count": 248,
+      "exec": 0.903,
+      "exact": 0.883
+    },
+    "medium": {
+      "count": 446,
+      "exec": 0.785,
+      "exact": 0.715
+    },
+    "hard": {
+      "count": 174,
+      "exec": 0.632,
+      "exact": 0.517
+    },
+    "extra": {
+      "count": 166,
+      "exec": 0.524,
+      "exact": 0.452
+    },
+    "all": {
+      "count": 1034,
+      "exec": 0.746,
+      "exact": 0.68
+    }
+  },
+  "per_example_matches_official_cli": true,
+  "contract": {
+    "expected": 1034,
+    "received": 1034,
+    "missing": [],
+    "duplicates": [],
+    "unknown": [],
+    "db_mismatch": [],
+    "ok": true
+  },
+  "extraction_status": {
+    "ok": 1034
+  },
+  "screen_status": {
+    "ok": 941,
+    "exec_error": 93
+  },
+  "evaluator": {
+    "repo": "https://github.com/taoyds/test-suite-sql-eval",
+    "commit": "e97acc546ecbee8fa27fa8dbf025ef61493a876c",
+    "options": "--etype all (no --plug_value, no --keep_distinct)"
+  },
+  "scoring_seconds": 130.3
+}

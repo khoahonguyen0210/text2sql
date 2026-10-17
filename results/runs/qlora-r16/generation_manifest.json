@@ -1,0 +1,70 @@
+{
+  "run_id": "qlora-r16-dev",
+  "started_at": "2026-10-16T03:49:33Z",
+  "task": "generate",
+  "split": "dev",
+  "subset": "full",
+  "example_count": 1034,
+  "data": {
+    "questions_file": "data/processed/dev_questions.jsonl",
+    "questions_sha256": "7ec43dc910146196d03bdd10b7429d5b98ce12eaeae290fe738f3c4162cd47dc",
+    "tables_json_sha256": "61bb20aa401f03164e2d7f3b16509b7b5f79cc9c943ca7bd159046df1159e2ed"
+  },
+  "model": {
+    "id": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+    "revision": "2e1fd397ee46e1388853d2af2c993145b0f1098a",
+    "dtype": "float16",
+    "adapter": "qlora-r16",
+    "adapter_sha256": "0f5eec8b0656e746e0c524231a21b3e469c847691ff03333b60e888dd4d04ead"
+  },
+  "prompt": {
+    "version": "v1",
+    "schema_style": "ddl",
+    "include_foreign_keys": true,
+    "hash": "9509d91ab66deabd"
+  },
+  "decoding": {
+    "max_new_tokens": 256,
+    "do_sample": false,
+    "num_beams": 1,
+    "repetition_penalty": 1.0
+  },
+  "batch_size": 8,
+  "config_file": "configs/base.toml",
+  "environment": {
+    "hardware": {
+      "os": "Linux-6.18.48+-x86_64-with-glibc2.39",
+      "python": "3.13.15",
+      "machine": "x86_64",
+      "cpu": "x86_64",
+      "torch_threads": 2,
+      "cuda_available": true,
+      "cuda": "12.8",
+      "gpu": "Tesla T4",
+      "gpu_count": 2,
+      "gpu_memory_gb": 14.56
+    },
+    "packages": {
+      "torch": "2.11.0+cu128",
+      "transformers": "5.20.0",
+      "peft": "0.21.2",
+      "accelerate": "1.15.0",
+      "bitsandbytes": "0.50.2",
+      "tokenizers": "0.23.1",
+      "sqlglot": "30.23.0",
+      "nltk": "3.9.1",
+      "sqlparse": "0.6.0",
+      "fastapi": "0.141.1"
+    },
+    "git": {
+      "commit": null,
+      "dirty": false
+    }
+  },
+  "model_load_seconds": 15.0,
+  "finished_at": "2026-10-16T03:54:11Z",
+  "generation_seconds": 262.4,
+  "prediction_count": 1034,
+  "predictions_sha256": "1491045a62b2da131d181ea832eb1a6b650414014d1694201ae14bba2f2d8c6a",
+  "code_commit": "067650820ea664d81f4a3fec4255194341307970"
+}

@@ -1,0 +1,26 @@
+{
+  "checked_at": "2026-10-16T00:43:27Z",
+  "what": "dev gold SQL scored as predictions",
+  "spider": {
+    "example_count": 1034,
+    "scores": {
+      "EX": 1.0,
+      "EM": 1.0
+    },
+    "per_example_matches_official_cli": true,
+    "database_files": 20,
+    "database_files_unchanged": true,
+    "scoring_seconds": 66.2
+  },
+  "testsuite": {
+    "example_count": 1034,
+    "scores": {
+      "TS": 1.0,
+      "EM": 1.0
+    },
+    "per_example_matches_official_cli": true,
+    "database_files": 695,
+    "database_files_unchanged": true,
+    "scoring_seconds": 1341.1
+  }
+}
