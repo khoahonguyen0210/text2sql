@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 
-DB_ID = r"^[a-z0-9_]{1,64}$"
+DB_ID = r"^[A-Za-z0-9_]{1,64}$"  # Spider dev has cre_Doc_Template_Mgt
 REQUEST_ID = r"^[A-Za-z0-9_-]{1,64}$"
 
 

@@ -72,6 +72,14 @@ def test_bad_input_is_rejected(make_client, payload):
         assert "x" * 50 not in r.text
 
 
+def test_database_name_with_capitals(toy_db):
+    app = create_app(lambda: FakeBackend("SELECT count(*) FROM singer"),
+                     {"cre_Toy_DB": schema_from_spider(TOY_TABLES)}, {"cre_Toy_DB": toy_db})
+    with TestClient(app, raise_server_exceptions=False) as client:
+        r = client.post("/v1/generate-sql", json={"question": "x", "db_id": "cre_Toy_DB"})
+        assert r.status_code == 200
+
+
 def test_unknown_database(make_client):
     with make_client() as client:
         r = client.post("/v1/generate-sql", json={"question": "x", "db_id": "other"})

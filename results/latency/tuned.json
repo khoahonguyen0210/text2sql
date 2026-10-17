@@ -1,0 +1,73 @@
+{
+  "measured_at": "2026-10-17T03:48:39Z",
+  "model": "tuned",
+  "setup": {
+    "where": "one laptop CPU, API and client on the same machine",
+    "dtype": "float32, adapter merged into the base weights",
+    "requests_per_level": 50,
+    "warmup_requests": 3,
+    "questions": "random sample of Spider dev questions, seed 13",
+    "arrival": "closed loop: each worker sends its next request after the last reply",
+    "timed_part": "client time covers HTTP, prompt building, generation, SQL extraction and the safety check; it does not run the SQL",
+    "max_new_tokens": 256
+  },
+  "startup_seconds_until_ready": 37.1,
+  "runs": [
+    {
+      "concurrency": 1,
+      "requests": 50,
+      "errors": 0,
+      "client_latency_ms": {
+        "p50": 22685.9,
+        "p95": 57152.2,
+        "mean": 28841.3
+      },
+      "model_latency_ms": {
+        "p50": 22667.6,
+        "p95": 57107.3
+      },
+      "throughput_rps": 0.035,
+      "completion_tokens_mean": 27.1,
+      "prompt_tokens_mean": 322.9,
+      "wall_seconds": 1442.1
+    },
+    {
+      "concurrency": 2,
+      "requests": 50,
+      "errors": 0,
+      "client_latency_ms": {
+        "p50": 48753.4,
+        "p95": 105776.5,
+        "mean": 57568.9
+      },
+      "model_latency_ms": {
+        "p50": 23105.2,
+        "p95": 57887.3
+      },
+      "throughput_rps": 0.034,
+      "completion_tokens_mean": 27.1,
+      "prompt_tokens_mean": 322.9,
+      "wall_seconds": 1455.6
+    }
+  ],
+  "hardware": {
+    "os": "Windows-11",
+    "python": "3.12.14",
+    "machine": "AMD64",
+    "cpu": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+    "torch_threads": 12,
+    "cuda_available": false
+  },
+  "packages": {
+    "torch": "2.14.1+cpu",
+    "transformers": "5.20.0",
+    "peft": "0.21.2",
+    "accelerate": "1.15.0",
+    "bitsandbytes": null,
+    "tokenizers": "0.23.3",
+    "sqlglot": "30.23.0",
+    "nltk": "3.10.3",
+    "sqlparse": "0.6.0",
+    "fastapi": "0.143.2"
+  }
+}
