@@ -17,7 +17,7 @@
 ![GitHub Actions](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?logo=githubactions&logoColor=white)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-<img src="docs/images/demo.png" alt="Text-to-SQL demo page" width="640">
+![Text-to-SQL demo page](docs/images/demo.png)
 
 </div>
 
