@@ -12,7 +12,7 @@
   <div class="progress" id="progress" hidden></div>
 
   <header class="nav" id="nav">
-    <a class="brand" href="#top">TEXT2SQL</a>
+    <a class="brand" href="#top">TEXT-TO-SQL</a>
     <nav class="links" aria-label="Sections">
       <a href="#databases">Databases</a>
       <a href="#examples">Examples</a>
@@ -21,51 +21,84 @@
   </header>
 
   <main id="top">
-    <section class="hero" id="hero" aria-labelledby="db-title">
+    <section class="hero" id="hero" aria-labelledby="hero-title">
       <div class="hero-art" aria-hidden="true">
         <span>SELECT</span><span>FROM</span><span>JOIN</span><span>WHERE</span>
         <span>GROUP BY</span><span>ORDER BY</span><span>COUNT(*)</span><span>LIMIT</span>
       </div>
-      <div class="hero-body">
-        <p class="eyebrow" id="db-eyebrow">Database</p>
-        <h1 id="db-title">Ask your database anything</h1>
-        <p class="tables" id="tables"></p>
-        <form class="ask" id="ask">
-          <label class="sr-only" for="question">Question</label>
-          <input id="question" type="text" maxlength="500" autocomplete="off"
-            placeholder="Ask a question about this database">
-          <button class="btn btn-red" id="write" type="submit">
-            <span id="write-label">Write SQL</span>
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
-          </button>
-        </form>
-        <p class="hint">A small fine-tuned model writes the SQL. You read it first, then run it.</p>
+      <div class="hero-grid">
+        <div class="hero-body">
+          <p class="eyebrow">Text-to-SQL demo</p>
+          <h1 id="hero-title">Ask in English.<br><span class="shine">Get the SQL, and run&nbsp;it.</span></h1>
+          <p class="lead">A small AI model writes the database query. You run it and see the answer.</p>
+        </div>
+
+        <section class="app" id="app" aria-label="Ask a database">
+          <div class="app-bar">
+            <i></i><i></i><i></i>
+            <a class="db-chip" href="#databases">
+              <span class="db-icon" id="db-icon" aria-hidden="true"></span>
+              <span class="db-text"><strong id="db-name"></strong><small id="db-tables"></small></span>
+              <span class="db-change">Change</span>
+            </a>
+            <span class="demo-tag" id="demo-tag">Example · click to try</span>
+          </div>
+
+          <div class="step on" id="step-q">
+            <span class="step-label"><b>1</b>You ask</span>
+            <form class="ask" id="ask">
+              <label class="sr-only" for="question">Question</label>
+              <input id="question" type="text" maxlength="500" autocomplete="off"
+                placeholder="Ask a question about this database">
+              <button class="btn btn-red" id="write" type="submit">
+                <span id="write-label">Write SQL</span>
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+              </button>
+            </form>
+          </div>
+
+          <div class="step" id="step-sql">
+            <span class="step-label">
+              <b>2</b>The model writes SQL
+              <span class="badge" id="safety"></span>
+              <span class="step-meta" id="meta"></span>
+            </span>
+            <pre class="code" id="demo-sql" aria-hidden="true"></pre>
+            <label class="sr-only" for="sql">SQL</label>
+            <textarea id="sql" rows="2" maxlength="4000" spellcheck="false" hidden
+              placeholder="The SQL appears here. You can also type your own."></textarea>
+            <div class="actions" id="actions">
+              <button class="btn btn-white" id="run" type="button">
+                <svg class="icon fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>
+                <span>Run query</span>
+              </button>
+              <button class="btn btn-gray" id="copy" type="button">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>
+                <span id="copy-label">Copy SQL</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="step" id="step-rows">
+            <span class="step-label">
+              <b>3</b>Run it, see the answer
+              <span class="step-meta" id="result-meta"></span>
+            </span>
+            <div class="table-wrap"><table id="result"></table></div>
+            <p class="empty" id="rows-empty">The rows appear here after you run the query.</p>
+          </div>
+        </section>
       </div>
     </section>
 
-    <section class="answer" id="answer" hidden aria-labelledby="answer-title">
-      <p class="eyebrow" id="answer-db">Your SQL</p>
-      <h2 id="answer-title"></h2>
-      <p class="meta"><span class="badge" id="safety"></span><span id="meta"></span></p>
-      <label class="sr-only" for="sql">SQL</label>
-      <textarea id="sql" rows="3" maxlength="4000" spellcheck="false"></textarea>
-      <div class="actions">
-        <button class="btn btn-white" id="run" type="button">
-          <svg class="icon fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>
-          <span>Run query</span>
-        </button>
-        <button class="btn btn-gray" id="copy" type="button">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>
-          <span id="copy-label">Copy SQL</span>
-        </button>
-      </div>
-      <div class="result" id="result-wrap" hidden>
-        <p class="result-meta" id="result-meta"></p>
-        <div class="table-wrap"><table id="result"></table></div>
-      </div>
+    <section class="stats" id="stats" aria-label="Results">
+      <div class="stat reveal"><b data-count="74.8" data-suffix="%">0</b><span>right on 20 databases it never saw</span></div>
+      <div class="stat reveal"><b data-count="10.6" data-prefix="+" data-suffix=" pts">0</b><span>better than the base model</span></div>
+      <div class="stat reveal"><b data-count="1.5" data-suffix="B">0</b><span>parameters, small enough for a laptop</span></div>
+      <div class="stat reveal"><b data-count="2" data-suffix=" h">0</b><span>to train on one free GPU</span></div>
     </section>
 
-    <section class="row" id="databases" aria-labelledby="databases-title">
+    <section class="row reveal" id="databases" aria-labelledby="databases-title">
       <h2 id="databases-title">Pick a database</h2>
       <div class="rail">
         <button class="rail-arrow prev" type="button" aria-label="Scroll left">&#8249;</button>
@@ -74,8 +107,8 @@
       </div>
     </section>
 
-    <section class="row" id="examples" aria-labelledby="examples-title">
-      <h2 id="examples-title">Top 10 questions to try <span class="row-note">From the Spider dev set</span></h2>
+    <section class="row reveal" id="examples" aria-labelledby="examples-title">
+      <h2 id="examples-title">Questions to try</h2>
       <div class="rail">
         <button class="rail-arrow prev" type="button" aria-label="Scroll left">&#8249;</button>
         <div class="rail-track" id="example-track"></div>
@@ -87,8 +120,7 @@
   <div class="toast" id="error" role="alert" hidden></div>
 
   <footer class="footer">
-    <p>Queries run read-only on public Spider benchmark databases. Only one SELECT query runs at a
-      time, with a time limit and a 100-row limit. Nothing you type is stored.</p>
+    <span>Read-only</span><span>One SELECT at a time</span><span>100-row limit</span><span>Nothing stored</span>
   </footer>
 
   <script src="/static/app.js"></script>

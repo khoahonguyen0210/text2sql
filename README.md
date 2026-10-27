@@ -1,10 +1,10 @@
 <div align="center">
 
-# Text-to-SQL QLoRA Lab
+# text2sql
 
 **Ask questions about a database in plain English. Get SQL written by a small fine-tuned model, checked for safety before it runs, and scored with the official Spider evaluator.**
 
-[![CI](https://github.com/khoahonguyen0210/text2sql-qlora-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/khoahonguyen0210/text2sql-qlora-lab/actions/workflows/ci.yml)
+[![CI](https://github.com/khoahonguyen0210/text2sql/actions/workflows/ci.yml/badge.svg)](https://github.com/khoahonguyen0210/text2sql/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
 ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?logo=pytorch&logoColor=white)
 ![Transformers](https://img.shields.io/badge/Transformers-FFD21E?logo=huggingface&logoColor=black)
@@ -31,13 +31,13 @@
 
 Most data lives in databases, and getting answers out of a database means writing SQL. Many people who have questions about data cannot write it, and the large AI models that can are expensive to run.
 
-Text-to-SQL QLoRA Lab fine-tunes a small open model, [Qwen2.5-Coder-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct), to write SQL from a question and a database schema. Training uses QLoRA, so a full run fits on one free Kaggle GPU. Every score comes from the official Spider evaluator, and every run saves the settings, data hashes, and predictions behind it, so each number can be checked again.
+text2sql fine-tunes a small open model, [Qwen2.5-Coder-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct), to write SQL from a question and a database schema. Training uses QLoRA, so a full run fits on one free Kaggle GPU. Every score comes from the official Spider evaluator, and every run saves the settings, data hashes, and predictions behind it, so each number can be checked again.
 
 The project uses [Spider 1.0](https://yale-lily.github.io/spider), a public benchmark of questions and SQL across 166 databases on topics such as concerts, flights, and pets. The model is trained on 146 of these databases and tested on 20 others that it never saw.
 
 ## Key Features
 
-- **Ask in plain English** — Pick a database, type a question, and get SQL back with a safety check. The demo page can then run the SQL and show the rows.
+- **Ask in plain English** — Pick a database, type a question, and get SQL back with a safety check. One window on the demo page holds the question, the SQL, and the rows it returns. Until you use it, the window plays a real example from the fine-tuned model.
 - **Fair comparison** — The base model and the fine-tuned model use the same prompt, the same schema text, and the same decoding. Only the weights change.
 - **Official scoring** — Scores come from the official Spider evaluator, pinned to one commit. Before any model is scored, the gold SQL itself is scored and must get 100%.
 - **A stricter second score** — Each query is also run on many extra copies of each database, which catches queries that are right only by chance.
@@ -204,8 +204,8 @@ Add `--db-set testsuite` for the TS score. A rescore of the saved fine-tuned run
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/khoahonguyen0210/text2sql-qlora-lab.git
-cd text2sql-qlora-lab
+git clone https://github.com/khoahonguyen0210/text2sql.git
+cd text2sql
 ```
 
 ### 2. Install the packages
@@ -232,7 +232,7 @@ uv run python scripts/build_data.py
 uv run python -m text2sql.serving --base
 ```
 
-Open http://127.0.0.1:8000 and ask a question. The first start downloads about 3 GB of model weights from Hugging Face. `--base` serves the model without the adapter, because the adapter weights are not stored in this repository. To serve the fine-tuned model, train the adapter (step 5) and put it in `artifacts/runs/qlora-r16/adapter/`.
+Open http://127.0.0.1:8000. Click the window to stop the example, then type a question, press **Write SQL**, check the SQL, and press **Run query**. You can also edit the SQL, or type your own, before you run it. The first start downloads about 3 GB of model weights from Hugging Face. `--base` serves the model without the adapter, because the adapter weights are not stored in this repository. To serve the fine-tuned model, train the adapter (step 5) and put it in `artifacts/runs/qlora-r16/adapter/`.
 
 ### 5. Train the model (optional)
 
@@ -259,7 +259,7 @@ There are 111 tests. They use small built-in databases, so they need no Spider d
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| GET | `/` | Demo page: pick a database, ask a question, and run the SQL |
+| GET | `/` | Demo page: pick a database, ask a question, and run the SQL in one window |
 | GET | `/health`, `/ready` | Health checks |
 | GET | `/v1/databases` | List the 20 dev databases and their tables |
 | POST | `/v1/generate-sql` | Write SQL for a question and check it |
